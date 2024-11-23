@@ -26,7 +26,7 @@ function SongCard({ songObj, onUpdate, artistId, genreObj }) {
         </div>
         <div className="cardBody">
           <Card.Title>{songObj.title}</Card.Title>
-          <Card.Title>{genreObj}</Card.Title>
+          <Card.Title>Genre: {genreObj}</Card.Title>
         </div>
       </div>
       {/* DYNAMIC LINK TO EDIT THE BOOK DETAILS  */}
