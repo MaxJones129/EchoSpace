@@ -2,3 +2,22 @@ body {
   background: black;
   color: white;
 }
+
+.cardMain {
+  display: flex;
+  flex-direction: row;
+}
+
+.cardBody {
+  display: flex;
+  flex-direction: column;
+  margin-left: 1rem;
+  justify-content: center;
+}
+
+.songBtns {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 1%;
+}
