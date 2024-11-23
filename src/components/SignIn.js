@@ -1,5 +1,6 @@
 import React from 'react';
 import { Button } from 'react-bootstrap';
+import Image from 'react-bootstrap/Image';
 import { signIn } from '../utils/auth';
 
 function Signin() {
@@ -13,8 +14,9 @@ function Signin() {
         margin: '0 auto',
       }}
     >
-      <h1>Hi there!</h1>
-      <p>Click the button below to login!</p>
+      <div className="signInImage">
+        <Image className="nav-img" style={{ width: '22rem' }} src="/images/emblem.png" />
+      </div>
       <Button type="button" size="lg" className="copy-btn" onClick={signIn}>
         Sign In
       </Button>
