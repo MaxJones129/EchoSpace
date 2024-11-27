@@ -9,7 +9,7 @@ import Link from 'next/link';
 import { deleteSong } from '../api/songData';
 import { useAuth } from '../utils/context/authContext';
 
-function SongCard({ songObj, onUpdate, artistId, genreObj, artistObj }) {
+function ArtistSongCard({ songObj, onUpdate, artistId, genreObj }) {
   const { user } = useAuth();
   // SO WE PASS THE FUNCTION FROM THE PARENT THAT GETS THE BOOKS
   const deleteThisSong = () => {
@@ -27,9 +27,6 @@ function SongCard({ songObj, onUpdate, artistId, genreObj, artistObj }) {
         <div className="cardBody">
           <Card.Title>{songObj.title}</Card.Title>
           <Card.Title>Genre: {genreObj}</Card.Title>
-          <Link href={`/artist/${songObj.artistId}`} passHref>
-            <Button variant="info">{artistObj}</Button>
-          </Link>
         </div>
       </div>
       {/* DYNAMIC LINK TO EDIT THE BOOK DETAILS  */}
@@ -49,7 +46,7 @@ function SongCard({ songObj, onUpdate, artistId, genreObj, artistObj }) {
   );
 }
 
-SongCard.propTypes = {
+ArtistSongCard.propTypes = {
   songObj: PropTypes.shape({
     image: PropTypes.string,
     title: PropTypes.string,
@@ -67,4 +64,4 @@ SongCard.propTypes = {
   }).isRequired,
 };
 
-export default SongCard;
+export default ArtistSongCard;
