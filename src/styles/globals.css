@@ -21,3 +21,10 @@ body {
   justify-content: center;
   gap: 1%;
 }
+
+.section {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
