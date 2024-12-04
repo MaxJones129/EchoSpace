@@ -4,10 +4,13 @@
 import React, { useEffect, useState } from 'react';
 // import { useAuth } from '@/utils/context/authContext';
 // import PropTypes from 'prop-types';
+import { useAuth } from '@/utils/context/authContext';
+import { Reorder, useDragControls } from 'framer-motion';
 import SongCard from '../components/SongCard';
 import { getSongs } from '../api/songData';
 import { getGenres } from '../api/genreData';
-import { getArtists } from '../api/artistData';
+import { getArtists, getYourArtist } from '../api/artistData';
+import ArtistForm from '../components/forms/ArtistForm';
 
 // Utility function to shuffle an array
 const shuffleArray = (array) => {
@@ -22,15 +25,23 @@ const shuffleArray = (array) => {
 function Home() {
   const [genres, setGenres] = useState([]);
   const [artists, setArtists] = useState([]);
+  const [yourArtist, setYourArtist] = useState({});
   const [songs, setSongs] = useState([]);
-  const [shuffleSongs1, setShuffleSongs1] = useState([]);
-  const [shuffleSongs2, setShuffleSongs2] = useState([]);
-  const [shuffleSongs3, setShuffleSongs3] = useState([]);
+  const [sections, setSections] = useState([1, 2, 3]);
+  const [shuffleSongs, setShuffleSongs] = useState([]);
+  // const [shuffleSongs2, setShuffleSongs2] = useState([]);
+  // const [shuffleSongs3, setShuffleSongs3] = useState([]);
+
+  const controls = useDragControls();
+  console.warn(controls);
+
+  const { user } = useAuth();
 
   const getAllTheData = () => {
     getSongs().then(setSongs);
     getGenres().then(setGenres);
     getArtists().then(setArtists);
+    getYourArtist(user.uid).then(setYourArtist);
   };
 
   const getGenreName = (genreId) => {
@@ -39,7 +50,7 @@ function Home() {
   };
 
   const getArtistName = (artistId) => {
-    const setArtist = artists.find((artist) => artist.firebaseKey === artistId);
+    const setArtist = artists.find((artist) => artist.userId === artistId);
     return setArtist ? setArtist.name : 'Unknown Artist';
   };
 
@@ -47,41 +58,65 @@ function Home() {
     getAllTheData();
   }, []);
 
+  const shuffleTime = () => {
+    const shuffle = shuffleArray(songs);
+    const threeSongs = shuffle.slice(0, 3);
+    setShuffleSongs(threeSongs);
+  };
+
   useEffect(() => {
-    if (songs) {
-      const shuffle = shuffleArray(songs);
-      const firstThreeSongs = shuffle.slice(0, 3);
-      const shuffle2 = shuffleArray(songs);
-      const secondThreeSongs = shuffle2.slice(0, 3);
-      const shuffle3 = shuffleArray(songs);
-      const thirdThreeSongs = shuffle3.slice(0, 3);
-      setShuffleSongs1(firstThreeSongs);
-      setShuffleSongs2(secondThreeSongs);
-      setShuffleSongs3(thirdThreeSongs);
-    }
+    shuffleTime();
+    // const shuffle2 = shuffleArray(songs);
+    // const secondThreeSongs = shuffle2.slice(0, 3);
+    // setShuffleSongs2(secondThreeSongs);
+    // const shuffle3 = shuffleArray(songs);
+    // const thirdThreeSongs = shuffle3.slice(0, 3);
+    // setShuffleSongs3(thirdThreeSongs);
   }, [songs]);
+
+  useEffect(() => {
+    getAllTheData();
+  }, []);
 
   return (
     <div className="text-center d-flex flex-column justify-content-center">
       {/* <h1>Hello {user.displayName}! </h1> */}
-      <div className="section">
-        {/* TODO: map over books here using BookCard component */}
-        {shuffleSongs1.map((song) => (
-          <SongCard key={song.firebaseKey} songObj={song} artistObj={getArtistName(song.artistId)} genreObj={getGenreName(song.genreId)} onUpdate={getAllTheData} artistId={song.artistId} />
-        ))}
-      </div>
-      <div className="section">
-        {/* TODO: map over books here using BookCard component */}
-        {shuffleSongs2.map((song) => (
-          <SongCard key={song.firebaseKey} songObj={song} artistObj={getArtistName(song.artistId)} genreObj={getGenreName(song.genreId)} onUpdate={getAllTheData} artistId={song.artistId} />
-        ))}
-      </div>
-      <div className="section">
-        {/* TODO: map over books here using BookCard component */}
-        {shuffleSongs3.map((song) => (
-          <SongCard key={song.firebaseKey} songObj={song} artistObj={getArtistName(song.artistId)} genreObj={getGenreName(song.genreId)} onUpdate={getAllTheData} artistId={song.artistId} />
-        ))}
-      </div>
+      {yourArtist[0]?.name ? (
+        <div className="homeSections">
+          <Reorder.Group values={sections} onReorder={setSections}>
+            {sections.map((item, index) => (
+              <Reorder.Item value={item} key={item}>
+                <h1>Section {index + 1}</h1>
+                <div className="section">
+                  {shuffleSongs.map((song) => (
+                    <SongCard key={song.firebaseKey} songObj={song} artistObj={getArtistName(song.artistId)} genreObj={getGenreName(song.genreId)} onUpdate={getAllTheData} artistId={song.artistId} />
+                  ))}
+                </div>
+              </Reorder.Item>
+            ))}
+          </Reorder.Group>
+
+          {/* <div className="section">
+              {shuffleSongs1.map((song) => (
+
+                <SongCard key={song.firebaseKey} songObj={song} artistObj={getArtistName(song.artistId)} genreObj={getGenreName(song.genreId)} onUpdate={getAllTheData} artistId={song.artistId} />
+              ))}
+          </div> */}
+
+          {/* <div className="section">
+          {shuffleSongs2.map((song) => (
+            <SongCard key={song.firebaseKey} songObj={song} artistObj={getArtistName(song.artistId)} genreObj={getGenreName(song.genreId)} onUpdate={getAllTheData} artistId={song.artistId} />
+          ))}
+        </div>
+        <div className="section">
+          {shuffleSongs3.map((song) => (
+            <SongCard key={song.firebaseKey} songObj={song} artistObj={getArtistName(song.artistId)} genreObj={getGenreName(song.genreId)} onUpdate={getAllTheData} artistId={song.artistId} />
+          ))}
+        </div> */}
+        </div>
+      ) : (
+        <ArtistForm onUpdate={getAllTheData} />
+      )}
     </div>
   );
 }

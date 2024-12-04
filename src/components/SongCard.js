@@ -36,7 +36,7 @@ function SongCard({ songObj, onUpdate, artistId, genreObj, artistObj }) {
       <div className="songBtns">
         {user.uid === artistId && (
           <>
-            <Link href={`/song/edit/${songObj.firebaseKey}`} passHref>
+            <Link href={`/song/edit/${songObj.artistId}`} passHref>
               <Button variant="info">EDIT</Button>
             </Link>
             <Button variant="danger" onClick={deleteThisSong}>
