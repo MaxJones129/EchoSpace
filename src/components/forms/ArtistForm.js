@@ -14,7 +14,7 @@ const initialState = {
   name: '',
 };
 
-function ArtistForm({ obj = initialState }) {
+function ArtistForm({ obj = initialState, onUpdate }) {
   const [formInput, setFormInput] = useState(obj);
   const router = useRouter();
   const { user } = useAuth();
@@ -39,7 +39,7 @@ function ArtistForm({ obj = initialState }) {
     } else {
       const payload = { ...formInput, userId: user.uid };
       createArtist(payload).then(({ name }) => {
-        // onUpdate();
+        onUpdate();
         const patchPayload = { firebaseKey: name };
         updateArtist(patchPayload).then(() => {
           router.push('/');
@@ -74,7 +74,7 @@ ArtistForm.propTypes = {
     name: PropTypes.string,
     firebaseKey: PropTypes.string,
   }).isRequired,
-  // onUpdate: PropTypes.func.isRequired,
+  onUpdate: PropTypes.func.isRequired,
 };
 
 export default ArtistForm;

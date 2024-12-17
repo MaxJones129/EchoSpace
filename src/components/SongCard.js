@@ -18,6 +18,10 @@ function SongCard({ songObj, onUpdate, artistId, genreObj, artistObj }) {
     }
   };
 
+  // const doFav = () => {
+  //   toggleFavoriteSong(songObj.firebaseKey, user.id).then(() => onUpdate());
+  // };
+
   return (
     <Card style={{ width: '23rem', margin: '10px' }}>
       <div className="cardMain">
@@ -27,16 +31,25 @@ function SongCard({ songObj, onUpdate, artistId, genreObj, artistObj }) {
         <div className="cardBody">
           <Card.Title>{songObj.title}</Card.Title>
           <Card.Title>Genre: {genreObj}</Card.Title>
-          <Link href={`/artist/${songObj.artistId}`} passHref>
-            <Button variant="info">{artistObj}</Button>
-          </Link>
+          <div className="cardBodyMiddle">
+            <Link href={`/artist/${songObj.artistId}`} passHref>
+              <Button variant="info">{artistObj}</Button>
+            </Link>
+            {/* <Button variant={songObj.liked ? 'danger' : 'outline-danger'}> */}
+            {songObj.liked ? '⭐' : '❌'}
+            {/* </Button> */}
+          </div>
+          {/* <audio controls>
+            <source src={songObj.audioUrl} type="audio/mpeg" />
+            Your browser does not support the audio element.
+          </audio> */}
         </div>
       </div>
       {/* DYNAMIC LINK TO EDIT THE BOOK DETAILS  */}
       <div className="songBtns">
         {user.uid === artistId && (
           <>
-            <Link href={`/song/edit/${songObj.artistId}`} passHref>
+            <Link href={`/song/edit/${songObj.firebaseKey}`} passHref>
               <Button variant="info">EDIT</Button>
             </Link>
             <Button variant="danger" onClick={deleteThisSong}>
