@@ -126,4 +126,17 @@ const getSongGenre = (artistId) =>
       .catch(reject);
   });
 
+// const toggleFavoriteSong = (firebaseKey, uid) =>
+//   new Promise((resolve, reject) => {
+//     fetch(`${endpoint}/songs/${firebaseKey}`, {
+//       method: 'PUT',
+//       headers: {
+//         'Content-Type': 'application/json',
+//       },
+//     })
+//       .then((response) => response.json())
+//       .then((data) => resolve(data))
+//       .catch(reject);
+//     });
+
 export { getSongs, getSongsByArtist, getUserSongs, updateSong, deleteSong, createSong, likedSongs, getSingleSong, getSongGenre };

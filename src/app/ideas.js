@@ -11,6 +11,7 @@ import { getSongs } from '../api/songData';
 import { getGenres } from '../api/genreData';
 import { getArtists, getYourArtist } from '../api/artistData';
 import ArtistForm from '../components/forms/ArtistForm';
+import { getSections } from '../api/sectionData';
 
 // Utility function to shuffle an array
 const shuffleArray = (array) => {
@@ -27,12 +28,10 @@ function Home() {
   const [artists, setArtists] = useState([]);
   const [yourArtist, setYourArtist] = useState({});
   const [songs, setSongs] = useState([]);
-  const [sections, setSections] = useState([0, 1, 2]);
+  const [sections, setSections] = useState([]);
   const [shuffleSongs, setShuffleSongs] = useState([]);
-  const [shuffleSongs2, setShuffleSongs2] = useState([]);
-  const [shuffleSongs3, setShuffleSongs3] = useState([]);
-
-  const songsArray = [shuffleSongs, shuffleSongs2, shuffleSongs3];
+  // const [shuffleSongs2, setShuffleSongs2] = useState([]);
+  // const [shuffleSongs3, setShuffleSongs3] = useState([]);
 
   const controls = useDragControls();
   console.warn(controls);
@@ -44,6 +43,7 @@ function Home() {
     getGenres().then(setGenres);
     getArtists().then(setArtists);
     getYourArtist(user.uid).then(setYourArtist);
+    getSections().then(setSections);
   };
 
   const getGenreName = (genreId) => {
@@ -64,16 +64,16 @@ function Home() {
     const shuffle = shuffleArray(songs);
     const threeSongs = shuffle.slice(0, 3);
     setShuffleSongs(threeSongs);
-    const shuffle2 = shuffleArray(songs);
-    const secondThreeSongs = shuffle2.slice(0, 3);
-    setShuffleSongs2(secondThreeSongs);
-    const shuffle3 = shuffleArray(songs);
-    const thirdThreeSongs = shuffle3.slice(0, 3);
-    setShuffleSongs3(thirdThreeSongs);
   };
 
   useEffect(() => {
     shuffleTime();
+    // const shuffle2 = shuffleArray(songs);
+    // const secondThreeSongs = shuffle2.slice(0, 3);
+    // setShuffleSongs2(secondThreeSongs);
+    // const shuffle3 = shuffleArray(songs);
+    // const thirdThreeSongs = shuffle3.slice(0, 3);
+    // setShuffleSongs3(thirdThreeSongs);
   }, [songs]);
 
   useEffect(() => {
@@ -86,11 +86,11 @@ function Home() {
       {yourArtist[0]?.name ? (
         <div className="homeSections">
           <Reorder.Group values={sections} onReorder={setSections}>
-            {sections.map((section, index) => (
-              <Reorder.Item value={section} key={section}>
+            {sections.map((item, index) => (
+              <Reorder.Item value={item} key={item}>
                 <h1>Section {index + 1}</h1>
                 <div className="section">
-                  {songsArray[section]?.map((song) => (
+                  {shuffleSongs.map((song) => (
                     <SongCard key={song.firebaseKey} songObj={song} artistObj={getArtistName(song.artistId)} genreObj={getGenreName(song.genreId)} onUpdate={getAllTheData} artistId={song.artistId} />
                   ))}
                 </div>
@@ -106,7 +106,3 @@ function Home() {
 }
 
 export default Home;
-
-// Home.propTypes = {
-//   params: PropTypes.objectOf({}).isRequired,
-// };

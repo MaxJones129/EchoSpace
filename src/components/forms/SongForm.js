@@ -14,7 +14,7 @@ const initialState = {
   image: '',
   liked: true,
   title: '',
-  // artistId: '',
+  // firebaseKey: '',
 };
 
 function SongForm({ obj = initialState }) {

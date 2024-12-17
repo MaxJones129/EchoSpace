@@ -45,7 +45,7 @@ function Home() {
       <div className="d-flex flex-wrap justify-content-center">
         {/* TODO: map over books here using BookCard component */}
         {songs.map((song) => (
-          <SongCard key={song.firebaseKey} songObj={song} genreObj={getGenreName(song.genreId)} onUpdate={getMySongs} artistId={song.artistId} />
+          <SongCard key={song.firebaseKey} songObj={song} artistObj={user.displayName} genreObj={getGenreName(song.genreId)} onUpdate={getMySongs} artistId={song.artistId} />
         ))}
       </div>
     </div>
